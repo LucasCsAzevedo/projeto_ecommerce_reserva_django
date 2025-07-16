@@ -19,5 +19,5 @@ from django.urls import path, include # include para adicionar os links da nossa
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('loja.urls')) # Adicionando os links da nossa loja, aula 4
+    path('', include('loja.urls'), name="loja") # Adicionando os links da nossa loja, aula 4
 ]
