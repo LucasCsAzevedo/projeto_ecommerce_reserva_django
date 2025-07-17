@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReservaAzevedo</title> <!--Aula 7-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" /> <!--Referenciando o nosso arquivo css usando o django-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"> <!--Referenciando o nosso arquivo css usando o django-->
 </head>
 <body>
-    <nav>Barra de Navegação</nav>
+    {% include 'navbar.html' %} <!--Criamos um arquivo separado para nossa navbar - Aula 10-->
     {% block body %} <!--Temos um bloco-->
     {% endblock %}
 </body>
