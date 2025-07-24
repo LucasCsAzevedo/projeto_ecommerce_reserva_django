@@ -12,13 +12,21 @@ class Cliente(models.Model):
     id_sessao = models.CharField(max_length=200, null=True, blank=True)
     usuario = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE) # Relacionamento de tabelas, nesse caso Um para Um com a tabela de Users nativa do django, como parâmetro vou passar a tabela que está sendo relacionada, e no caso de campos com relacionamento preciso passar o on_delete, caso deletar o usuário o que vai acontecer?
 
+    def __str__(self): # Usado para retornar o nome do objeto!! Por exemplo: Ao invés de voltar o Cliente.object(1), vai voltar o nome do cliente de fato. Ou o que vai "printar" para o usuário
+        return str(self.nome)
 # Categorias
 class Categoria(models.Model): # (Masculino, Feminino, Infantil)
     nome = models.CharField(max_length=200, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.nome)
 
 # Tipos
 class Tipo(models.Model): # (Camisa, Camiseta, Calça)
     nome = models.CharField(max_length=200, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.nome)
 
 # Produto
 class Produto(models.Model):
