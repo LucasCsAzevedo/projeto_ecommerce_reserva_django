@@ -7,8 +7,8 @@
 
 {% for produto in produtos %}
 
+<img src="{{ produto.imagem.url }}" width="300" height="400"> <!--Forma de carregar uma imagem, usando o link dela-->
 <p> Produto: {{ produto.preco }}</p>
-<img> Imagem: {{ produto.imagem }}
 
 {% endfor %}
 

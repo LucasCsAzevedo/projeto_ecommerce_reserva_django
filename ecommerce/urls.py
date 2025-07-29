@@ -16,8 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include # include para adicionar os links da nossa loja, aula 4
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('loja.urls'), name="loja") # Adicionando os links da nossa loja, aula 4
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # Adicionando o link das nossas URLs definidas no settings.py
