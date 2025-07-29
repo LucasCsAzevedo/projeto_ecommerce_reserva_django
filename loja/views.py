@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import * # importando os nossos modelos para usar nas nossas views
 
 '''
     Um site possui um frontend e um backend
@@ -12,7 +13,9 @@ def homepage(request): # Toda função dentro da minha views precisa receber uma
 
 
 def loja(request):
-    return render(request, 'loja.html')
+    produtos = Produto.objects.all() # Consulta na nossa tabela do banco para retornar todos os nossos produtos, famoso queryset
+    context = {"produtos": produtos} # Variável que consigo acessar no meu template
+    return render(request, 'loja.html', context)
 
 
 def carrinho(request):

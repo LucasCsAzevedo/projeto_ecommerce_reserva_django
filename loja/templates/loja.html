@@ -5,4 +5,11 @@
 
 <h3>Loja</h3>
 
+{% for produto in produtos %}
+
+<p> Produto: {{ produto.preco }}</p>
+<img> Imagem: {{ produto.imagem }}
+
+{% endfor %}
+
 {% endblock %}
