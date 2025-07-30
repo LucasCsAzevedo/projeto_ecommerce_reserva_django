@@ -23,6 +23,12 @@ def loja(request, nome_categoria=None): # acrescentei o valor dinâmico "nome_ca
     return render(request, 'loja.html', context)
 
 
+def ver_produto(request, id_produto):
+    produto = Produto.objects.get(id=id_produto)
+    context = {"produto":produto}
+    return render(request, "ver_produto.html", context)
+
+
 def carrinho(request):
     return render(request, 'carrinho.html')
 
