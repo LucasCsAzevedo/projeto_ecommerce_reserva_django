@@ -9,8 +9,9 @@
 
 {% if banner.ativo == True  %}
 
-<img src="{{ banner.imagem.url }}" >
-
+<a href="/{{ banner.link_destino }}">
+    <img src="{{ banner.imagem.url }}" >
+</a>
 {% endif %}
 
 {% endfor %}

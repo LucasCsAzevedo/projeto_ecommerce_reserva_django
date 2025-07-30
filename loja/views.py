@@ -15,7 +15,7 @@ def homepage(request): # Toda função dentro da minha views precisa receber uma
     return render(request, 'homepage.html', context) # Por padrão a view precisa renderizar algo (render) através da requisição, uma homepage, Aula 5
 
 
-def loja(request):
+def loja(request, nome_categoria=None): # acrescentei o valor dinâmico "nome_categoria"
     produtos = Produto.objects.filter(ativo=True) # Consulta na nossa tabela do banco para retornar todos os nossos produtos, famoso queryset
     context = {"produtos": produtos} # Variável que consigo acessar no meu template
     return render(request, 'loja.html', context)
