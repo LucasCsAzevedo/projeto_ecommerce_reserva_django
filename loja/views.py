@@ -9,14 +9,14 @@ from .models import * # importando os nossos modelos para usar nas nossas views
 
 # Create your views here.
 def homepage(request): # Toda função dentro da minha views precisa receber uma requisição, seja ela do tipo GET ou POST, Aula 5
-    banners = Banner.objects.all()
+    banners = Banner.objects.filter(ativo=True) # Filtrando o objeto conforme os parâmetros que ele tem
     context = {"banners": banners}
     
     return render(request, 'homepage.html', context) # Por padrão a view precisa renderizar algo (render) através da requisição, uma homepage, Aula 5
 
 
 def loja(request):
-    produtos = Produto.objects.all() # Consulta na nossa tabela do banco para retornar todos os nossos produtos, famoso queryset
+    produtos = Produto.objects.filter(ativo=True) # Consulta na nossa tabela do banco para retornar todos os nossos produtos, famoso queryset
     context = {"produtos": produtos} # Variável que consigo acessar no meu template
     return render(request, 'loja.html', context)
 
