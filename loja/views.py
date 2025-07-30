@@ -25,7 +25,11 @@ def loja(request, nome_categoria=None): # acrescentei o valor dinâmico "nome_ca
 
 def ver_produto(request, id_produto):
     produto = Produto.objects.get(id=id_produto)
-    context = {"produto":produto}
+    itens_estoque = ItemEstoque.objects.filter(produto=produto, quantidade__gt=0) # Esse filtro de quantidade é equivalente a quantidade > 0 (pesquisar por django querysets)
+    context = {
+        "produto": produto,
+        "itens_estoque": itens_estoque
+    }
     return render(request, "ver_produto.html", context)
 
 
