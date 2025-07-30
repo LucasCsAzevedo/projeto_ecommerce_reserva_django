@@ -5,4 +5,14 @@
 
 <h3>Home page</h3>
 
+{% for banner in banners %}
+
+{% if banner.ativo == True  %}
+
+<img src="{{ banner.imagem.url }}" >
+
+{% endif %}
+
+{% endfor %}
+
 {% endblock %}
