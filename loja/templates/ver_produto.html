@@ -3,14 +3,25 @@
 
 {% block body %}
 
-<h3>{{ produto.nome }}</h3>
+    <h3>{{ produto.nome }}</h3>
 
-{{ itens_estoque }}
+    {% if tem_estoque  %}
 
-<img src="{{ produto.imagem.url }}" width="300" height="400"> <!--Forma de carregar uma imagem, usando o link dela-->
-<p> Produto: {{ produto.nome }}</p>
-<p> Preço: {{ produto.preco }}</p>
+        <img src="{{ produto.imagem.url }}" width="300" height="400"> <!--Forma de carregar uma imagem, usando o link dela-->
+        <p> Produto: {{ produto.nome }}</p>
+        <p> Preço: {{ produto.preco }}</p>
 
-<button>Adicionar ao Carrinho</button>
+        {% for cor in cores %}
+        {{ cor.nome }}
+        <i class="fa-solid fa-circle" style="color: {{ cor.codigo }} ;"></i> <!--Que legal!!!-->
+        {% endfor %}
+
+        <button>Adicionar ao Carrinho</button>
+
+    {% else %}
+
+        <p>Produto fora de estoque</p>
+
+    {% endif %}
 
 {% endblock %}
