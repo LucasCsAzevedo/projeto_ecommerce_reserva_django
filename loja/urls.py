@@ -9,6 +9,7 @@ urlpatterns = [
     path('loja/', loja, name="loja"), # Aula 6
     path('loja/<str:nome_categoria>/', loja, name="loja"), # Criando um link dinâmico, geralmente não colocamos valores dinâmicos como o primeiro parâmetro da url
     path('produto/<int:id_produto>/', ver_produto, name="ver_produto"),
+    path('produto/<int:id_produto>/<int:id_cor>/', ver_produto, name="ver_produto"),
     path('minhaconta/', minha_conta, name="minha_conta"), # Aula 6
     path('login/', login, name="login"), # Aula 6
     path('carrinho/', carrinho, name="carrinho"), # Aula 6

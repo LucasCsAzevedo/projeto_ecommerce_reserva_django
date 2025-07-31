@@ -23,20 +23,30 @@ def loja(request, nome_categoria=None): # acrescentei o valor dinâmico "nome_ca
     return render(request, 'loja.html', context)
 
 
-def ver_produto(request, id_produto):
+def ver_produto(request, id_produto, id_cor=None):
+    tem_estoque = False
+    cores = {}
+    tamanhos = {}
+    cor = None
+    if id_cor:
+        cor = Cor.objects.get(id=id_cor)
+        nome_cor = cor.nome
     produto = Produto.objects.get(id=id_produto)
     itens_estoque = ItemEstoque.objects.filter(produto=produto, quantidade__gt=0) # Esse filtro de quantidade é equivalente a quantidade > 0 (pesquisar por django querysets)
     if len(itens_estoque) > 0:
         tem_estoque = True
         cores = {item.cor for item in itens_estoque} # Para aparecer somente os valores distintos preciso passar um set, dentro de um colchetes
-    else:
-        tem_estoque = False
-        cores = {}
+        if id_cor:
+            itens_estoque = ItemEstoque.objects.filter(produto=produto, quantidade__gt=0, cor__id=id_cor)
+            tamanhos = {item.tamanho for item in itens_estoque}
+            
     context = {
         "produto": produto,
         "itens_estoque": itens_estoque,
         "tem_estoque": tem_estoque,
-        "cores": cores
+        "cores": cores,
+        "tamanhos": tamanhos,
+        "nome_cor_selecionada": nome_cor
     }
     return render(request, "ver_produto.html", context)
 

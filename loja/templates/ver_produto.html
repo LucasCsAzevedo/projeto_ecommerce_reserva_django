@@ -11,10 +11,23 @@
         <p> Produto: {{ produto.nome }}</p>
         <p> Preço: {{ produto.preco }}</p>
 
+        {% if nome_cor_selecionada %}
+            Cor: {{ nome_cor_selecionada }}
+        {% endif %}
+
         {% for cor in cores %}
-        {{ cor.nome }}
-        <i class="fa-solid fa-circle" style="color: {{ cor.codigo }} ;"></i> <!--Que legal!!!-->
+        {% comment %} {{ cor.nome }} {% endcomment %}
+        <a href="{% url 'ver_produto' produto.id cor.id %}">
+            <i class="fa-solid fa-circle" style="color: {{ cor.codigo }} ;"></i> <!--Que legal!!!-->
+        </a>
         {% endfor %}
+
+        {% if tamanhos %}
+            <p>Selecione um tamanho:</p>
+            {% for tamanho in tamanhos %}
+                <button>{{ tamanho }}</button>
+            {% endfor %}
+        {% endif %}
 
         <button>Adicionar ao Carrinho</button>
 
