@@ -23,13 +23,18 @@
         {% endfor %}
 
         {% if tamanhos %}
+        <form method="post" action="{% url 'adicionar_carrinho' produto.id %}">
+            {% csrf_token %} <!-- Todo formulário django precisa ter esse method, action e o {% csrf_token %} -->
             <p>Selecione um tamanho:</p>
             {% for tamanho in tamanhos %}
-                <button>{{ tamanho }}</button>
+                <input type="radio" name="tamanho" value="{{ tamanho }}">
+                <label for="{{ tamanho }}">{{ tamanho }}</label>
             {% endfor %}
+            <button type="submit">Adicionar ao Carrinho</button>
+        </form>
         {% endif %}
 
-        <button>Adicionar ao Carrinho</button>
+       
 
     {% else %}
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import * # importando os nossos modelos para usar nas nossas views
 
 '''
@@ -42,13 +42,20 @@ def ver_produto(request, id_produto, id_cor=None):
             
     context = {
         "produto": produto,
-        "itens_estoque": itens_estoque,
+        # "itens_estoque": itens_estoque,
         "tem_estoque": tem_estoque,
         "cores": cores,
         "tamanhos": tamanhos,
         "nome_cor_selecionada": nome_cor
     }
     return render(request, "ver_produto.html", context)
+
+
+def adicionar_carrinho(request, id_produto):
+    if request.method == 'POST' and id_produto:
+        return redirect('carrinho')
+    else:
+        return redirect('loja') # Redirecionando para nossa loja, através do nome que definimos na url
 
 
 def carrinho(request):
