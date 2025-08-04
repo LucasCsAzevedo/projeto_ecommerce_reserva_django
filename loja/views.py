@@ -27,10 +27,9 @@ def ver_produto(request, id_produto, id_cor=None):
     tem_estoque = False
     cores = {}
     tamanhos = {}
-    cor = None
+    cor_selecionada = None
     if id_cor:
-        cor = Cor.objects.get(id=id_cor)
-        nome_cor = cor.nome
+        cor_selecionada = Cor.objects.get(id=id_cor)
     produto = Produto.objects.get(id=id_produto)
     itens_estoque = ItemEstoque.objects.filter(produto=produto, quantidade__gt=0) # Esse filtro de quantidade é equivalente a quantidade > 0 (pesquisar por django querysets)
     if len(itens_estoque) > 0:
@@ -42,17 +41,22 @@ def ver_produto(request, id_produto, id_cor=None):
             
     context = {
         "produto": produto,
-        # "itens_estoque": itens_estoque,
         "tem_estoque": tem_estoque,
         "cores": cores,
         "tamanhos": tamanhos,
-        "nome_cor_selecionada": nome_cor
+        "cor_selecionada": cor_selecionada
     }
     return render(request, "ver_produto.html", context)
 
 
 def adicionar_carrinho(request, id_produto):
     if request.method == 'POST' and id_produto:
+        dados = request.POST.dict()
+        print(dados)
+        tamanho = dados.get("tamanho")
+        id_cor = dados.get("cor")
+        if not tamanho:
+            return redirect('loja')
         return redirect('carrinho')
     else:
         return redirect('loja') # Redirecionando para nossa loja, através do nome que definimos na url

@@ -11,8 +11,8 @@
         <p> Produto: {{ produto.nome }}</p>
         <p> Preço: {{ produto.preco }}</p>
 
-        {% if nome_cor_selecionada %}
-            Cor: {{ nome_cor_selecionada }}
+        {% if cor_selecionada %}
+            Cor: {{ cor_selecionada.nome }}
         {% endif %}
 
         {% for cor in cores %}
@@ -24,12 +24,13 @@
 
         {% if tamanhos %}
         <form method="post" action="{% url 'adicionar_carrinho' produto.id %}">
-            {% csrf_token %} <!-- Todo formulário django precisa ter esse method, action e o {% csrf_token %} -->
+            {% csrf_token %} <!-- Todo formulário POST django precisa ter esse method, action e o {% csrf_token %} -->
             <p>Selecione um tamanho:</p>
             {% for tamanho in tamanhos %}
                 <input type="radio" name="tamanho" value="{{ tamanho }}">
                 <label for="{{ tamanho }}">{{ tamanho }}</label>
             {% endfor %}
+            <input type="hidden" name="cor" value="{{ cor_selecionada.id }}"> <!--Como eu quero passar o nome da cor para o backend faço esse input escondido para mandar a informação-->
             <button type="submit">Adicionar ao Carrinho</button>
         </form>
         {% endif %}
