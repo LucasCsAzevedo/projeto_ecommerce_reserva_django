@@ -60,10 +60,11 @@ TEMPLATES = [
         'DIRS': [], # Como criamos uma pasta de templates com o nome padrão do django, não foi preciso adicionar manualmente, aula 5
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [
+            'context_processors': [ # Aqui são os contextos que estarão disponíveis em todas as páginas para nós
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'loja.novos_context.carrinho' # Adicionando a função carrinho
             ],
         },
     },
