@@ -67,7 +67,7 @@ def carrinho(request):
         cliente = request.user.cliente
         
     pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False) # O django já tem essa função para caso não encontrar o pedido, criar ele.
-    itens_pedido = ItensPedido.objects.filter(pedido=pedido)
+    itens_pedido = ItensPedido.objects.filter(pedido=pedido)      
     context = {
         "pedido": pedido,
         "itens_pedido": itens_pedido

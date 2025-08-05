@@ -81,6 +81,22 @@ class Pedido(models.Model):
     def __str__(self):
         return str(f'Cliente: {self.cliente} | Id Pedido: {self.id} | Finalizado: {self.finalizado}')
     
+    @property
+    def quantidade_total(self):
+        itens_pedido = ItensPedido.objects.filter(pedido__id=self.id)
+        quantidade = sum(
+            [item.quantidade for item in itens_pedido]
+        )
+        return quantidade
+    
+    @property
+    def preco_total(self):
+        itens_pedido = ItensPedido.objects.filter(pedido__id=self.id)
+        preco = sum(
+            [item.preco_total for item in itens_pedido]
+        )
+        return preco
+    
 # ItensPedido
 class ItensPedido(models.Model):
     item_estoque = models.ForeignKey(ItemEstoque, null=True, blank=True, on_delete=models.SET_NULL)
@@ -89,6 +105,10 @@ class ItensPedido(models.Model):
     
     def __str__(self):
         return str(f'Id Pedido: {self.pedido.id} | Produto: {self.item_estoque.produto.nome}, {self.item_estoque.tamanho}, {self.item_estoque.cor.nome}')
+    
+    @property # Estou dizendo que vou usar essa função sem precisar passar os parenteses, usando ela como se fosse um campo
+    def preco_total(self): # posso criar métodos para a minha classe sem necessariamente criar um campo na tabela
+        return self.quantidade * self.item_estoque.produto.preco
 
 
 class Banner(models.Model):
