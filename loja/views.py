@@ -76,3 +76,5 @@ def minha_conta(request): # template de autenticação do usuário
 
 def login(request): # template de autenticação do usuário
     return render(request, 'user/login.html')
+
+# TODO sempre que o usuario criar uma conta no nosso site vamos precisar criar um cliente para ele, fazer uma função

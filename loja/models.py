@@ -78,11 +78,17 @@ class Pedido(models.Model):
     endereco = models.ForeignKey(Endereco, null=True, blank=True, on_delete=models.SET_NULL)
     data_finalizacao = models.DateTimeField(null=True, blank=True)
     
+    def __str__(self):
+        return str(f'Cliente: {self.cliente} | Id Pedido: {self.id} | Finalizado: {self.finalizado}')
+    
 # ItensPedido
 class ItensPedido(models.Model):
     item_estoque = models.ForeignKey(ItemEstoque, null=True, blank=True, on_delete=models.SET_NULL)
     quantidade = models.IntegerField(default=0)
     pedido = models.ForeignKey(Pedido, null=True, blank=True, on_delete=models.SET_NULL)
+    
+    def __str__(self):
+        return str(f'Id Pedido: {self.pedido.id} | Produto: {self.item_estoque.produto.nome}, {self.item_estoque.tamanho}, {self.item_estoque.cor.nome}')
 
 
 class Banner(models.Model):
