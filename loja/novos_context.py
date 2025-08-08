@@ -7,7 +7,11 @@ def carrinho(request):
     if request.user.is_authenticated:
         cliente = request.user.cliente # Consigo pegar o cliente através do user, como existe um relacionamento OnetoOne eu poderia fazer isso inverso: cliente.user
     else:
-        return {"quantidade_produtos_carrinho": quantidade_produtos_carrinho}
+        if request.COOKIES.get("id_sessao"):
+            id_sessao = request.COOKIES.get('id_sessao')
+            cliente, criado = Cliente.objects.get_or_create(id_sessao=id_sessao)
+        else:
+            return {"quantidade_produtos_carrinho": quantidade_produtos_carrinho}
         
     pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False) # O django já tem essa função para caso não encontrar o pedido, criar ele.
     itens_pedido = ItensPedido.objects.filter(pedido=pedido)

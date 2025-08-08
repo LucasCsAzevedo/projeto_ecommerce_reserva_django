@@ -66,7 +66,7 @@ def adicionar_carrinho(request, id_produto):
                 id_sessao = request.COOKIES.get('id_sessao')
             else:
                 id_sessao = str(uuid.uuid4()) # Por que o uuid4? Porque ele gera o randômico sem que os números se repitam
-                resposta.set_cookie(key="id_sessao", value=id_sessao)
+                resposta.set_cookie(key="id_sessao", value=id_sessao, max_age=2592000) # Adicionando um tempo máximo que o cookie dura no navegador do usuário, está em segundos
                 
             cliente, criado = Cliente.objects.get_or_create(id_sessao=id_sessao) # get_or_create sempre retorna duas informações, criado é sempre "padrão"
             
@@ -92,7 +92,11 @@ def remover_carrinho(request, id_produto):
         if request.user.is_authenticated:
             cliente = request.user.cliente
         else:
-            redirect('loja')
+            if request.COOKIES.get("id_sessao"):
+                id_sessao = request.COOKIES.get("id_sessao")
+                cliente, criado = Cliente.objects.get_or_create(id_sessao=id_sessao)
+            else:
+                return redirect('loja')
             
         pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False) # TODO Revisar! Aula 34
         item_estoque = ItemEstoque.objects.get(produto__id=id_produto, tamanho=tamanho, cor__id=id_cor) # TODO Revisar! Aula 34
