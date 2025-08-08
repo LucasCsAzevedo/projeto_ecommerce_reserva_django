@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from .models import * # importando os nossos modelos para usar nas nossas views
+import uuid # Gerar números aleatórios não repetidos, usados para nosso id_sessao
 
 '''
     Um site possui um frontend e um backend
@@ -56,11 +57,18 @@ def adicionar_carrinho(request, id_produto):
         id_cor = dados.get("cor")
         if not tamanho:
             return redirect('loja')
-        
+               
+        resposta = redirect('carrinho')
         if request.user.is_authenticated:
             cliente = request.user.cliente
-        else:
-            redirect('loja')
+        else: # Criar o cliente anônimo, criar um id_sessao e armazenar no cookie do navegador
+            if request.COOKIES.get('id_sessao'):
+                id_sessao = request.COOKIES.get('id_sessao')
+            else:
+                id_sessao = str(uuid.uuid4()) # Por que o uuid4? Porque ele gera o randômico sem que os números se repitam
+                resposta.set_cookie(key="id_sessao", value=id_sessao)
+                
+            cliente, criado = Cliente.objects.get_or_create(id_sessao=id_sessao) # get_or_create sempre retorna duas informações, criado é sempre "padrão"
             
         pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False) # TODO Revisar! Aula 34
         item_estoque = ItemEstoque.objects.get(produto__id=id_produto, tamanho=tamanho, cor__id=id_cor) # TODO Revisar! Aula 34
@@ -68,7 +76,7 @@ def adicionar_carrinho(request, id_produto):
         item_pedido.quantidade += 1 # TODO Revisar! Aula 34
         item_pedido.save() # TODO Revisar! Aula 34
         
-        return redirect('carrinho')
+        return resposta
     else:
         return redirect('loja') # Redirecionando para nossa loja, através do nome que definimos na url
     
