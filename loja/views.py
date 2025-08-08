@@ -62,19 +62,39 @@ def adicionar_carrinho(request, id_produto):
         else:
             redirect('loja')
             
-        pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False)
-        item_estoque = ItemEstoque.objects.get(produto__id=id_produto, tamanho=tamanho, cor__id=id_cor)
-        item_pedido, criado = ItensPedido.objects.get_or_create(item_estoque=item_estoque, pedido=pedido)
-        item_pedido.quantidade += 1
-        item_pedido.save()
+        pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False) # TODO Revisar! Aula 34
+        item_estoque = ItemEstoque.objects.get(produto__id=id_produto, tamanho=tamanho, cor__id=id_cor) # TODO Revisar! Aula 34
+        item_pedido, criado = ItensPedido.objects.get_or_create(item_estoque=item_estoque, pedido=pedido) # TODO Revisar! Aula 34
+        item_pedido.quantidade += 1 # TODO Revisar! Aula 34
+        item_pedido.save() # TODO Revisar! Aula 34
         
         return redirect('carrinho')
     else:
         return redirect('loja') # Redirecionando para nossa loja, através do nome que definimos na url
     
     
-def remover_carrinho(request):
-    return redirect('carrinho')
+def remover_carrinho(request, id_produto):
+    if request.method == 'POST' and id_produto:
+        dados = request.POST.dict()
+        tamanho = dados.get("tamanho")
+        id_cor = dados.get("cor")
+        if not tamanho:
+            return redirect('loja')
+        
+        if request.user.is_authenticated:
+            cliente = request.user.cliente
+        else:
+            redirect('loja')
+            
+        pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False) # TODO Revisar! Aula 34
+        item_estoque = ItemEstoque.objects.get(produto__id=id_produto, tamanho=tamanho, cor__id=id_cor) # TODO Revisar! Aula 34
+        item_pedido, criado = ItensPedido.objects.get_or_create(item_estoque=item_estoque, pedido=pedido) # TODO Revisar! Aula 34
+        item_pedido.quantidade -= 1
+        item_pedido.save()
+        if item_pedido.quantidade <= 0:
+            item_pedido.delete()
+        
+        return redirect('carrinho')
 
 
 def carrinho(request):

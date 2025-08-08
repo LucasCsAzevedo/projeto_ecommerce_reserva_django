@@ -12,9 +12,31 @@
 
     <p>
         <img src="{{ item.item_estoque.produto.imagem.url }}" alt="" width="50px" height="70px">
-        Produto: {{ item.item_estoque.produto.nome }}; Cor: {{ item.item_estoque.cor.nome }}; Tamanho: {{ item.item_estoque.tamanho }}; Quantidade: {{ item.quantidade }}; Preço Unitário: R$ {{ item.item_estoque.produto.preco }}; Total: R$ {{ item.preco_total }}
-    </p>
+        Produto: {{ item.item_estoque.produto.nome }};
+        Cor: {{ item.item_estoque.cor.nome }};
+        Tamanho: {{ item.item_estoque.tamanho }};
 
+        <div style="display: flex;">
+            Quantidade:
+            <form method="post" action="{% url 'remover_carrinho' item.item_estoque.produto.id %}">
+                {% csrf_token %} <!-- Todo formulário POST django precisa ter esse method, action e o {% csrf_token %} -->
+                <input type="hidden" name="tamanho" value="{{ item.item_estoque.tamanho }}"> 
+                <input type="hidden" name="cor" value="{{ item.item_estoque.cor.id }}"> 
+                <button type="submit">-</button>
+            </form>
+            {{ item.quantidade }}
+            <form method="post" action="{% url 'adicionar_carrinho' item.item_estoque.produto.id %}">
+                {% csrf_token %} <!-- Todo formulário POST django precisa ter esse method, action e o {% csrf_token %} -->
+                <input type="hidden" name="tamanho" value="{{ item.item_estoque.tamanho }}"> 
+                <input type="hidden" name="cor" value="{{ item.item_estoque.cor.id }}"> 
+                <button type="submit">+</button>
+            </form>;
+        </div>
+
+        Preço Unitário: R$ {{ item.item_estoque.produto.preco }};
+        Total: R$ {{ item.preco_total }}
+    </p>
+<hr>
 {% endfor %}
 
 <a href="{% url 'checkout' %}">Checkout</a>

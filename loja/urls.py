@@ -15,4 +15,5 @@ urlpatterns = [
     path('carrinho/', carrinho, name="carrinho"), # Aula 6
     path('checkout/', checkout, name="checkout"), # Aula 6
     path('adicionarcarrinho/<int:id_produto>/', adicionar_carrinho, name="adicionar_carrinho"),
+    path('removercarrinho/<int:id_produto>/', remover_carrinho, name="remover_carrinho"),
 ]
