@@ -154,8 +154,30 @@ def checkout(request):
 
 
 def adicionar_endereco(request):
-    context = {}
-    return render(request, 'adicionar_endereco.html', context)
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            cliente = request.user.cliente
+        else:
+            if request.COOKIES.get("id_sessao"):
+                id_sessao = request.COOKIES.get('id_sessao')
+                cliente, criado = Cliente.objects.get_or_create(id_sessao=id_sessao)
+            else:
+                return redirect('loja')
+        dados = request.POST.dict()
+        endereco = Endereco.objects.create(
+            cliente=cliente,
+            rua=dados.get('rua'),
+            numero=int(dados.get('numero')),
+            complemento=dados.get('complemento'),
+            cep=dados.get('cep'),
+            cidade=dados.get('cidade'),
+            estado=dados.get('estado'),
+        )
+        endereco.save() # Como estou criando um dado no banco, talvez não tenha necessidade de salvar
+        return redirect('checkout')
+    else:
+        context = {}
+        return render(request, 'adicionar_endereco.html', context)
 
 
 def minha_conta(request): # template de autenticação do usuário
