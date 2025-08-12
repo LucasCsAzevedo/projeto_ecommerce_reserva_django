@@ -153,6 +153,11 @@ def checkout(request):
     return render(request, 'checkout.html', context)
 
 
+def adicionar_endereco(request):
+    context = {}
+    return render(request, 'adicionar_endereco.html', context)
+
+
 def minha_conta(request): # template de autenticação do usuário
     return render(request, 'user/minha_conta.html')
 

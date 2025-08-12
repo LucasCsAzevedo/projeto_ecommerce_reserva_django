@@ -11,8 +11,12 @@
 <p></p>Total Produtos: {{ pedido.quantidade_total }}</p>
 
 <form method="post" action="">
-    <h3>Selecione um endereço de entrega</h3>
     {% csrf_token %}
+
+    <h3>Selecione um endereço de entrega</h3>
+    <a href="{% url 'adicionar_endereco' %}">Adicionar endereço de entrega</a>
+    <br>
+    
     {% for endereco in enderecos %}
         <input type="radio" name="endereco" value="{{ endereco.id }}">
         <label for="{{ endereco.id }}">{{ endereco }}</label>
@@ -20,9 +24,13 @@
     {% endfor %}
 
     {% if not request.user.is_authenticated %}
+    <hr>
     <h4>Preencha seu e-mail para finalizar o pedido</h4>
         <input type="email" name="email" placeholder="e-mail">
     {% endif %}
+    <hr>
+    <input type="hidden" value="{{ pedido.preco_total }}" name="total">
+    <button type="submit">Finalizar pedido - R$ {{ pedido.preco_total }}</button>
 
 </form>
 
