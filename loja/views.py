@@ -135,7 +135,22 @@ def carrinho(request):
     
 
 def checkout(request):
-    return render(request, 'checkout.html')
+    if request.user.is_authenticated:
+        cliente = request.user.cliente
+    else:
+        if request.COOKIES.get("id_sessao"):
+            id_sessao = request.COOKIES.get('id_sessao')
+            cliente, criado = Cliente.objects.get_or_create(id_sessao=id_sessao)
+        else:
+            return redirect('loja')
+        
+    pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False) # O django já tem essa função para caso não encontrar o pedido, criar ele.
+    enderecos = Endereco.objects.filter(cliente=cliente)
+    context = {
+        "pedido": pedido,
+        "enderecos": enderecos,
+    }
+    return render(request, 'checkout.html', context)
 
 
 def minha_conta(request): # template de autenticação do usuário

@@ -69,6 +69,9 @@ class Endereco(models.Model):
     cidade = models.CharField(max_length=200, null=True, blank=True)
     estado = models.CharField(max_length=2, null=True, blank=True)
     cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.SET_NULL)
+    
+    def __str__(self):
+        return f'{self.rua}, {self.numero} - {self.complemento} - {self.cidade}-{self.estado} - {self.cep}'
 
 # Pedido
 class Pedido(models.Model):
