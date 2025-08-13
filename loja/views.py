@@ -19,7 +19,7 @@ def homepage(request): # Toda função dentro da minha views precisa receber uma
 def loja(request, nome_categoria=None): # acrescentei o valor dinâmico "nome_categoria"
     produtos = Produto.objects.filter(ativo=True) # Consulta na nossa tabela do banco para retornar todos os nossos produtos, famoso queryset
     if nome_categoria:
-        produtos = produtos.filter(categoria__nome=nome_categoria) # Filtrando de forma mais performática
+        produtos = produtos.filter(categoria__slug=nome_categoria) # Filtrando de forma mais performática
     context = {"produtos": produtos} # Variável que consigo acessar no meu template
     return render(request, 'loja.html', context)
 

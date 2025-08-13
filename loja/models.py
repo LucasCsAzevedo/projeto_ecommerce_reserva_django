@@ -17,6 +17,7 @@ class Cliente(models.Model):
 # Categorias
 class Categoria(models.Model): # (Masculino, Feminino, Infantil)
     nome = models.CharField(max_length=200, null=True, blank=True)
+    slug = models.CharField(max_length=200, null=True, blank=True) # Como que o nosso "nome" vai aparecer em formato de link?
     
     def __str__(self):
         return str(self.nome)
@@ -24,6 +25,7 @@ class Categoria(models.Model): # (Masculino, Feminino, Infantil)
 # Tipos
 class Tipo(models.Model): # (Camisa, Camiseta, Calça)
     nome = models.CharField(max_length=200, null=True, blank=True)
+    slug = models.CharField(max_length=200, null=True, blank=True) # Como que o nosso "nome" vai aparecer em formato de link?
     
     def __str__(self):
         return str(self.nome)
