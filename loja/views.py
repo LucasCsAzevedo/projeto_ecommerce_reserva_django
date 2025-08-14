@@ -20,7 +20,16 @@ def homepage(request): # Toda função dentro da minha views precisa receber uma
 def loja(request, filtro=None): # acrescentei o valor dinâmico "nome_categoria"
     produtos = Produto.objects.filter(ativo=True) # Consulta na nossa tabela do banco para retornar todos os nossos produtos, famoso queryset
     produtos = filtrar_produtos(produtos, filtro)
-    context = {"produtos": produtos} # Variável que consigo acessar no meu template
+    
+    tamanhos = ['P', 'M', 'G']
+    minimo, maximo = preco_minimo_maximo(produtos)
+    
+    context = {
+        "produtos": produtos,
+        "minimo": minimo,
+        "maximo": maximo,
+        "tamanhos": tamanhos,
+    } # Variável que consigo acessar no meu template
     return render(request, 'loja.html', context)
 
 
