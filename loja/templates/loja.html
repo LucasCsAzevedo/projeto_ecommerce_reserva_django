@@ -5,15 +5,11 @@
 
 <h3>Loja</h3>
 
-preco
-tamanho
-categoria
-tipo
-
 <form method="post" action="">
+    {% csrf_token %}
     <p>Preço</p>
-    <input type="number" name="preco_minimo" value={{ minimo }}> <!--As informações de valores, mínimo e máximo vamos buscar dos valores dos nossos produtos em geral-->
-    <input type="number" name="preco_maximo" value={{ maximo }}>
+    <input type="number" name="preco_minimo" value={{ minimo }} step="any"> <!--As informações de valores, mínimo e máximo vamos buscar dos valores dos nossos produtos em geral-->
+    <input type="number" name="preco_maximo" value={{ maximo }} step="any">
 
     <p>Tamanho</p>
     {% for tamanho in tamanhos %}

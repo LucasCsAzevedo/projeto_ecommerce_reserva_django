@@ -21,6 +21,14 @@ def loja(request, filtro=None): # acrescentei o valor dinâmico "nome_categoria"
     produtos = Produto.objects.filter(ativo=True) # Consulta na nossa tabela do banco para retornar todos os nossos produtos, famoso queryset
     produtos = filtrar_produtos(produtos, filtro)
     
+    if request.method == "POST":
+        dados = request.POST.dict() # Pegando os dados da requisição quando o usuário enviar um formulário
+        produtos = produtos.filter(preco__gte=dados.get('preco_minimo'), preco__lte=dados.get('preco_maximo'))
+        if "tamanho" in dados:
+            itens = ItemEstoque.objects.filter(produto__in=produtos, tamanho=dados.get('tamanho'))
+            ids_produto = itens.values_list('produto', flat=True).distinct()
+            produtos = produtos.filter(id__in=ids_produto)
+    
     itens = ItemEstoque.objects.filter(quantidade__gt=0, produto__in=produtos) # Essa query é: filtrar os itens estoque que a quantidade seja maior que 0 e o produto esteja dentro dos produtos (precisa passar uma lista ou iterável)
     tamanhos = itens.values_list('tamanho', flat=True).distinct() # Com a query acima feita, quero retornar os tamanhos disponíveis dos meus produtos, para isso posso usar o .values_list() mas por padrão ele retorna uma tupla para cada item, para retornar somente o valor basta usar esse atributo flat=True, e ele retorna também todos os valores que temos, por isso o distinct no final
     # Se o valor que estou pesquisando for um texto, ele vai retornar o valor cadastrado, se for um FoeringKey ele retorna os ids e com os ids eu faço uma instância do objeto que estou pesquisando para retornar os campos de texto
