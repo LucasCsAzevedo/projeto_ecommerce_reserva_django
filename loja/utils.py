@@ -19,3 +19,19 @@ def preco_minimo_maximo(produtos):
         maximo = round(list(produtos.aggregate(Max('preco')).values())[0], 2) # Como ele retorna um objeto (aggregate) preciso colocar um .values() para me mostrar os valores
         
     return minimo, maximo
+
+
+def ordenar_produtos(produtos, ordem):
+    if ordem == 'menor-preco':
+        produtos = produtos.order_by("preco")
+    elif ordem == 'maior-preco':
+        produtos = produtos.order_by("-preco") # Está ordenando de forma decrescente
+    elif ordem == 'mais-vendidos':
+        lista_produtos = []
+        for produto in produtos:
+            lista_produtos.append((produto.total_vendas, produto))
+            
+        lista_produtos = sorted(lista_produtos, reverse=True, key=lambda tupla: tupla[0]) # Como a minha lista retorna um tupla com valor e nome, ordeno pelo valor e depois pego somente os nomes
+        produtos = [item[1] for item in lista_produtos]
+    
+    return produtos

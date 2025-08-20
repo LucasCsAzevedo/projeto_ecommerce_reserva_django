@@ -42,6 +42,9 @@ def loja(request, filtro=None): # acrescentei o valor dinâmico "nome_categoria"
     categorias = Categoria.objects.filter(id__in=ids_categoria)
     minimo, maximo = preco_minimo_maximo(produtos)
     
+    ordem = request.GET.get('ordem', 'menor-preco') # Estou passando um parâmetro na minha url e dessa forma eu consigo pegar o que vier através do nome, e posso definir um valor padrão para caso não tiver informação
+    produtos = ordenar_produtos(produtos, ordem)
+    
     # tipos = itens.filter()
     
     context = {
