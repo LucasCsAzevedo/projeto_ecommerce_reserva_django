@@ -5,39 +5,50 @@
 
 <h3>Loja</h3>
 
-<form method="post" action="">
-    {% csrf_token %}
-    <p>Preço</p>
-    <input type="number" name="preco_minimo" value={{ minimo }} step="any"> <!--As informações de valores, mínimo e máximo vamos buscar dos valores dos nossos produtos em geral-->
-    <input type="number" name="preco_maximo" value={{ maximo }} step="any">
+<div style="display: flex;">
+    <form method="post" action="">
+        {% csrf_token %}
+        <p>Preço</p>
+        <input type="number" name="preco_minimo" value={{ minimo }} step="any"> <!--As informações de valores, mínimo e máximo vamos buscar dos valores dos nossos produtos em geral-->
+        <input type="number" name="preco_maximo" value={{ maximo }} step="any">
 
-    <p>Tamanho</p>
-    {% for tamanho in tamanhos %}
-        <input type="radio" name="tamanho" value="{{ tamanho }}">
-        <label for="{{ tamanho }}">{{ tamanho }}</label>
-    {% endfor %}
-    <p>Categoria</p>
-        {% for categoria in categorias %}
-           <input type="radio" name="categoria" value="{{ categoria.slug }}">
-            <label for="{{ categoria.slug }}">{{ categoria.nome }}</label>
+        <p>Tamanho</p>
+        {% for tamanho in tamanhos %}
+            <input type="radio" name="tamanho" value="{{ tamanho }}">
+            <label for="{{ tamanho }}">{{ tamanho }}</label>
         {% endfor %}
-    <p>Tipo</p>
-        {% for tipo in tipos %}
-            <input type="radio" name="tipo" value="{{ tipo.slug }}">
-            <label for="{{ tipo.slug }}">{{ tipo.nome }}</label>
+        <p>Categoria</p>
+            {% for categoria in categorias %}
+            <input type="radio" name="categoria" value="{{ categoria.slug }}">
+                <label for="{{ categoria.slug }}">{{ categoria.nome }}</label>
+            {% endfor %}
+        <p>Tipo</p>
+            {% for tipo in tipos_navegacao %}
+                <input type="radio" name="tipo" value="{{ tipo.slug }}">
+                <label for="{{ tipo.slug }}">{{ tipo.nome }}</label>
+            {% endfor %}
+        <button type="submit">Aplicar filtro</button>
+        
+    </form>
+
+    <div>
+        Ordenar por:
+        <ul>
+            <a href="#" class="item-ordenar" name="menor-preco"><li>Menor Preço</li></a>
+            <a href="#" class="item-ordenar" name="maior-preco"><li>Maior Preço</li></a>
+            <a href="#" class="item-ordenar" name="mais-vendidos"><li>Mais Vendidos</li></a>
+        </ul>
+        {% for produto in produtos %}
+
+        <a href="{% url 'ver_produto' produto.id %}"> <!--Criando um link dinâmico para as imagens-->
+            <img src="{{ produto.imagem.url }}" width="300" height="400"> <!--Forma de carregar uma imagem, usando o link dela-->
+        </a>
+        <p> Produto: {{ produto.nome }}</p>
+        <p> Preço: {{ produto.preco }}</p>
+
         {% endfor %}
-    <button type="submit">Aplicar filtro</button>
-    
-</form>
+    </div>
 
-{% for produto in produtos %}
-
-<a href="{% url 'ver_produto' produto.id %}"> <!--Criando um link dinâmico para as imagens-->
-    <img src="{{ produto.imagem.url }}" width="300" height="400"> <!--Forma de carregar uma imagem, usando o link dela-->
-</a>
-<p> Produto: {{ produto.nome }}</p>
-<p> Preço: {{ produto.preco }}</p>
-
-{% endfor %}
+</div>
 
 {% endblock %}

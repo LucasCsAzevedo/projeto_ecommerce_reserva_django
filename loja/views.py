@@ -28,18 +28,29 @@ def loja(request, filtro=None): # acrescentei o valor dinâmico "nome_categoria"
             itens = ItemEstoque.objects.filter(produto__in=produtos, tamanho=dados.get('tamanho'))
             ids_produto = itens.values_list('produto', flat=True).distinct()
             produtos = produtos.filter(id__in=ids_produto)
+            
+        if "tipo" in dados:
+            produtos = produtos.filter(tipo__slug=dados.get('tipo'))
+            
+        if "categoria" in dados:
+            produtos = produtos.filter(categoria__slug=dados.get('categoria'))
     
     itens = ItemEstoque.objects.filter(quantidade__gt=0, produto__in=produtos) # Essa query é: filtrar os itens estoque que a quantidade seja maior que 0 e o produto esteja dentro dos produtos (precisa passar uma lista ou iterável)
     tamanhos = itens.values_list('tamanho', flat=True).distinct() # Com a query acima feita, quero retornar os tamanhos disponíveis dos meus produtos, para isso posso usar o .values_list() mas por padrão ele retorna uma tupla para cada item, para retornar somente o valor basta usar esse atributo flat=True, e ele retorna também todos os valores que temos, por isso o distinct no final
     # Se o valor que estou pesquisando for um texto, ele vai retornar o valor cadastrado, se for um FoeringKey ele retorna os ids e com os ids eu faço uma instância do objeto que estou pesquisando para retornar os campos de texto
-    
+    ids_categoria = produtos.values_list('categoria', flat=True).distinct()
+    categorias = Categoria.objects.filter(id__in=ids_categoria)
     minimo, maximo = preco_minimo_maximo(produtos)
+    
+    # tipos = itens.filter()
     
     context = {
         "produtos": produtos,
         "minimo": minimo,
         "maximo": maximo,
         "tamanhos": tamanhos,
+        "categorias": categorias,
+        # "tipos": itens,
     } # Variável que consigo acessar no meu template
     return render(request, 'loja.html', context)
 
