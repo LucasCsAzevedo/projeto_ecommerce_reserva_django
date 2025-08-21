@@ -2,6 +2,9 @@ from django.shortcuts import redirect, render
 from .models import * # importando os nossos modelos para usar nas nossas views
 from .utils import *
 import uuid # Gerar números aleatórios não repetidos, usados para nosso id_sessao
+from django.contrib.auth import login, logout, authenticate
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 '''
     Um site possui um frontend e um backend
@@ -218,7 +221,84 @@ def minha_conta(request): # template de autenticação do usuário
     return render(request, 'user/minha_conta.html')
 
 
-def login(request): # template de autenticação do usuário
-    return render(request, 'user/login.html')
+def fazer_login(request): # template de autenticação do usuário
+    erro = False
+    if request.user.is_authenticated:
+        return redirect('loja')
+    
+    elif request.method == "POST":
+        dados = request.POST.dict()
+        
+        if "email" in dados and "senha" in dados:
+            email = dados.get('email')
+            senha = dados.get('senha')
+            usuario = authenticate(request, username=email, password=senha)
+            
+            if usuario:
+                login(request, usuario)
+                return redirect('loja')
+            else:
+                erro = True
+                
+        else:
+            erro = True
+        
+    context = {
+        "erro": erro
+    }
+    return render(request, 'user/fazer_login.html')
+
+
+def criar_conta(request):
+    erro = None
+    
+    if request.user.is_authenticated:
+        return redirect('loja')
+    
+    if request.method == "POST":
+        dados = request.POST.dict()
+        
+        if "email" in dados and "senha" in dados and "confirmacaosenha" in dados:
+            email = dados.get('email')
+            senha = dados.get('senha')
+            confirmacaosenha = dados.get('confirmacaosenha')
+            
+            try:
+                validate_email(email)
+            except ValidationError:
+                erro = "email_invalido"
+                
+            if senha == confirmacaosenha:
+                usuario, criado = User.objects.get_or_create(username=email, email=email)
+                if not criado:
+                    erro = "usuario_existente"
+                else:
+                    usuario.set_password(senha)
+                    usuario.save()
+                    
+                    usuario = authenticate(request, username=email, password=senha)
+                    login(request, usuario)
+                    
+                    if request.COOKIES.get('id_sessao'):
+                        id_sessao = request.COOKIES.get('id_sessao')
+                        cliente, criado = Cliente.objects.get_or_create(id_sessao=id_sessao)
+                    else:
+                        cliente, criado = Cliente.objects.get_or_create(email=email)
+                        
+                    cliente.usuario = usuario
+                    cliente.email = email
+                    cliente.save()
+                    return redirect('loja')
+                    
+            else:
+                erro = "senhas_diferentes"
+                
+        else:
+            erro = "preenchimento"
+            
+    context = {
+        "erro": erro
+    }
+    return render(request, 'user/criar_conta.html')
 
 # TODO sempre que o usuario criar uma conta no nosso site vamos precisar criar um cliente para ele, fazer uma função
