@@ -3,6 +3,7 @@ from .models import * # importando os nossos modelos para usar nas nossas views
 from .utils import *
 import uuid # Gerar números aleatórios não repetidos, usados para nosso id_sessao
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
@@ -217,6 +218,7 @@ def adicionar_endereco(request):
         return render(request, 'adicionar_endereco.html', context)
 
 
+@login_required
 def minha_conta(request): # template de autenticação do usuário
     return render(request, 'user/minha_conta.html')
 
@@ -301,4 +303,8 @@ def criar_conta(request):
     }
     return render(request, 'user/criar_conta.html')
 
-# TODO sempre que o usuario criar uma conta no nosso site vamos precisar criar um cliente para ele, fazer uma função
+
+@login_required
+def fazer_logout(request):
+    logout(request)
+    return redirect('fazer_login')

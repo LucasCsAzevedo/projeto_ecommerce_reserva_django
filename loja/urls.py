@@ -1,5 +1,5 @@
 from django.urls import path
-
+from django.contrib.auth import views
 from .views import * # ou from . import views ai para cada view preciso colocar o prefixo views.
 
 # app_name = "loja"
@@ -16,6 +16,14 @@ urlpatterns = [
     path('removercarrinho/<int:id_produto>/', remover_carrinho, name="remover_carrinho"),
     path('adicionarendereco/', adicionar_endereco, name="adicionar_endereco"),
     path('minhaconta/', minha_conta, name="minha_conta"), # Aula 6
-    path('fazer_login/', fazer_login, name="fazer_login"), # Aula 6
+    path('fazerlogin/', fazer_login, name="fazer_login"), # Aula 6
+    path('fazerlogout/', fazer_logout, name="fazer_logout"), # Aula 6
     path('criarconta/', criar_conta, name="criar_conta"), # Aula 6
+    
+    path("password_change/", views.PasswordChangeView.as_view(), name="password_change"),
+    path("password_change/done/", views.PasswordChangeDoneView.as_view(), name="password_change_done"),
+    path("password_reset/", views.PasswordResetView.as_view(), name="password_reset"),
+    path("password_reset/done/", views.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path("reset/<uidb64>/<token>/", views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path("reset/done/", views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
 ]
